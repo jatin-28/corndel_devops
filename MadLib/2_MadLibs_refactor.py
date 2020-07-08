@@ -2,19 +2,22 @@ import random
 
 token_marker = '__'
 token = '%%' + token_marker + '%%'
-filename = 'phrases.txt'
-lookup = {}
 
+# Read phrase file
+filename = 'phrases.txt'
 f = open(filename)
 phrases = f.read().splitlines()
 
 random_phrase = random.choice(phrases)
 
-lookup["NOUN"] = input("Enter a noun: ")
-lookup["VERB"] = input("Enter a verb: ")
-lookup["ADJECTIVE"] = input("Enter a adjective: ")
-lookup["ADVERB"] = input("Enter a adverb: ")
+# Read user input
+lookup = {"NOUN": input("Enter a noun: "),
+          "VERB": input("Enter a verb: "),
+          "ADJECTIVE": input("Enter a adjective: "),
+          "ADVERB": input("Enter a adverb: ")
+}
 
+# Perform replacement
 replacedPhrase = random_phrase
 
 for tokenType in lookup:

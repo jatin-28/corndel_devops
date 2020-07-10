@@ -19,6 +19,7 @@ if len(sys.argv) > 1:
 output = [movefile(formattedDateTime, x, path) for x in os.scandir(path) if x.is_file()]
 
 print("Time to append: " + formattedDateTime)
-print("Moved: ")
-print(output)
+print("Files moved: ")
+
+[print(x) for x in output]
 

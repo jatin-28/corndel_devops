@@ -16,8 +16,8 @@ path = 'temp3'
 if len(sys.argv) > 1:
     path = sys.argv[1]
 
-output = [movefile(formattedDateTime, f, root) for root,dirs,files in os.walk(path, topdown=False) for f in files]
-outputDirs = [movefile(formattedDateTime, d, root) for root,dirs,files in os.walk(path, topdown=False) for d in dirs]
+output = [movefile(formattedDateTime, f, root) for root, _, files in os.walk(path, topdown=False) for f in files]
+outputDirs = [movefile(formattedDateTime, d, root) for root, dirs, _ in os.walk(path, topdown=False) for d in dirs]
 
 print("Time to append: " + formattedDateTime)
 print("Files moved: ")

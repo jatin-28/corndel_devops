@@ -1,30 +1,30 @@
-import http.client
+import requests
 import json
 import string
-from random import random
+import random
 
-resourcePath = "/api/users"
-
+conn = requests.Session()
+resourcePath = "http://rem-rest-api.herokuapp.com/api/somerandomstrings"
 
 def randomName():
-    return ''.join(random.choices(string.ascii_uppercase, k=1)).join(random.choices(string.ascii_lowercase, k=5))
+    return ''.join(random.choices(string.ascii_lowercase, k=5))
 
 
-def makeRequest(method = "GET", payload = "", path = resourcePath):
-    conn = http.client.HTTPConnection("rem-rest-api.herokuapp.com")
+def makeRequest(method="GET", payload="", path="http://rem-rest-api.herokuapp.com/api/somerandomstrings"):
+
     headers = {
-        'Content-Type': "application/json",
-        'cache-control': "no-cache"
+        'Content-Type': "application/json"
     }
 
-    conn.request(method, path, payload, headers)
+    res = conn.request(method, path, data=payload, headers=headers)
 
-    res = conn.getresponse()
-    resdata = res.read()
-    jsondata = json.loads(resdata.decode("utf-8"))
+    if res.status_code > 400:
+        raise ValueError
+
+    jsondata = res.json()
 
     print("--------")
-    print(method)
+    print(f"{method} - status: {res.status_code} reason: {res.reason}")
     print(jsondata)
     print("--------")
 
@@ -36,18 +36,18 @@ makeRequest("GET")
 # POST
 firstName = randomName()
 lastName = randomName()
-payload = "{\"firstName\": \""+ firstName + "\", \"lastName\": \""+lastName+"\"}"
+payload = "{\"firstName\": \"" + firstName + "\", \"lastName\": \"" + lastName + "\"}"
 jsonData = makeRequest("POST", payload)
 createdId = jsonData['id']
 
 # GET with query params
-uriPath = f"{resourcePath}?offset={createdId - 1}&limit=10"
+uriPath = f"{resourcePath}?offset=0&limit=20"
 makeRequest("GET", path=uriPath)
 
 # PUT
 firstName = randomName()
 lastName = randomName()
-payload = "{\"firstName\": \""+ firstName + "\", \"lastName\": \""+lastName+"\"}"
+payload = "{\"firstName\": \"" + firstName + "\", \"lastName\": \"" + lastName + "\"}"
 uriPath = f"{resourcePath}/{createdId}"
 makeRequest("PUT", payload, uriPath)
 
@@ -59,6 +59,4 @@ makeRequest("GET", path=uriPath)
 uriPath = f"{resourcePath}/{createdId}"
 makeRequest("DELETE", payload, uriPath)
 
-
-
-
+makeRequest("GET")

@@ -48,13 +48,16 @@ resourcePath = "https://gateway.marvel.com:443/v1/public/characters"
 publickey = os.getenv('PUBLIC_KEY')
 privatekey = os.getenv('PRIVATE_KEY')
 
-characterName = input("Search for a Marvel character starting with: ")
+characterResults = []
+while not characterResults:
+    characterName = input("Search for a Marvel character starting with: ")
 
-payload = {'nameStartsWith': characterName}
+    payload = {'nameStartsWith': characterName}
 
-characterResults = makeGetRequest(resourcePath, payload)
+    characterResults = makeGetRequest(resourcePath, payload)
 
-print(characterResults)
+
+#print(characterResults)
 
 while True:
     print("Choose a character: ")

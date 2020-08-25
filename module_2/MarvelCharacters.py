@@ -24,24 +24,53 @@ def get_query_with_authentication_params(payload, PUBLIC_KEY, PRIVATE_KEY):
     return payload
 
 
+def makeGetRequest(url, payload):
+    try:
+        payload = get_query_with_authentication_params(payload, publickey, privatekey)
+        response = requests.get(url, params=payload)
+        response.raise_for_status()
+
+        jsonResponse = response.json()
+
+        return jsonResponse["data"]["results"]
+
+    except HTTPError as http_err:
+        print(f'HTTP error occurred: {http_err}')
+    except Exception as err:
+        print(f'Other error occurred: {err}')
+
+
+def printName(counter, character):
+    print(f"[] {counter}. {character['name']}")
+
+
+resourcePath = "https://gateway.marvel.com:443/v1/public/characters"
 publickey = os.getenv('PUBLIC_KEY')
 privatekey = os.getenv('PRIVATE_KEY')
 
-characterName = "Spider"
-resourcePath = "https://gateway.marvel.com:443/v1/public/characters"
+characterName = input("Search for a Marvel character starting with: ")
 
-try:
-    payload = {'nameStartsWith': characterName}
-    payload = get_query_with_authentication_params(payload, publickey, privatekey)
-    response = requests.get(resourcePath, params=payload)
-    response.raise_for_status()
+payload = {'nameStartsWith': characterName}
 
-    jsonResponse = response.json()
-    print("Entire JSON response")
-    print(jsonResponse)
+characterResults = makeGetRequest(resourcePath, payload)
 
-except HTTPError as http_err:
-    print(f'HTTP error occurred: {http_err}')
-except Exception as err:
-    print(f'Other error occurred: {err}')
+print(characterResults)
+
+while True:
+    print("Choose a character: ")
+    [printName(counter, x) for counter,x in enumerate(characterResults)]
+    index = int(input("Enter a number (-1 to exit): "))
+    if index == -1:
+        break
+
+    character = characterResults[index]
+    # print(f"You chose: {character}")
+
+    comics = makeGetRequest(character["comics"]["collectionURI"], {})
+
+    print(f"{character['description']}")
+    print()
+    # print(comics)
+
+
 

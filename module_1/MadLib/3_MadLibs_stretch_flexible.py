@@ -20,13 +20,13 @@ tokenList = re.findall(tokenRegex, random_phrase)
 tokenLookup = dict.fromkeys(tokenList)
 
 for tokenType in tokenLookup:
-    tokenLookup[tokenType] = input("Enter a(n) {}: ".format(tokenType))
+    tokenLookup[tokenType] = input(f"Enter a(n) {tokenType}: ")
 
 # Perform replacement
 replacedPhrase = random_phrase
 
-for tokenType in tokenLookup:
+for tokenType, tokenWord in tokenLookup.items():
     token_replace = token.replace(token_marker, tokenType)
-    replacedPhrase = replacedPhrase.replace(token_replace, tokenLookup[tokenType])
+    replacedPhrase = replacedPhrase.replace(token_replace, tokenWord)
 
 print(replacedPhrase)

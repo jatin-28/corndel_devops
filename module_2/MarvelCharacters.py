@@ -73,7 +73,14 @@ while True:
 
     print(f"{character['description']}")
     print()
-    # print(comics)
+    print(comics)
+    for c in comics:
+        print(f'Title: c["title"]')
+        # comic = makeGetRequest(c["collections"], {})
+        # print(f"Title: {comic}")
+        print(f"\t\tDescription: {c['description']}")
+    print()
+    input("Press enter to continue.....")
 
 
 
